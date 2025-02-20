@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>📊 차트 페이지</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+    <div class="radio-inputs">
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/data'" />
+            <span class="name">DATA</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" checked onclick="location.href='/main/chart'" />
+            <span class="name">CHART</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/ml'" />
+            <span class="name">ML</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/map'" />
+            <span class="name">MAP</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main'" />
+            <span class="name">HOME</span>
+        </label>
+    </div>
+
+    <style>
+        /* 📌 전체 컨테이너 스타일 */
+        .chart-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2열 구조 */
+            grid-template-rows: auto auto; /* 행 크기 자동 */
+            gap: 20px; /* 차트 간격 증가 */
+            max-width: 85vw; /* 전체 너비 조정 */
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* 📊 개별 차트 스타일 */
+        .chart-box {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            height: 50vh; /* 차트 크기 확대 */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        img {
+            max-width: 90%;
+            max-height: 38vh; /* 이미지 크기 조정 */
+            border-radius: 10px;
+            cursor: pointer; /* 🔥 클릭 가능 */
+            transition: transform 0.2s ease-in-out;
+        }
+
+        img:hover {
+            transform: scale(1.05); /* 🔍 마우스 오버 시 확대 */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 16px;
+            color: #555;
+        }
+    </style>
+
+    <script>
+        function goToDetail(imageName) {
+            window.location.href = "/main/chart/detail/" + imageName;
+        }
+    </script>
+
+</head>
+<body>
+    <h1>📈 데이터 시각화</h1>
+    <p>서울시 범죄율과 부동산 가격의 관계를 분석한 다양한 그래프를 제공합니다.</p>
+
+    <div class="chart-container">
+        <!-- 첫 번째 그래프 -->
+        <div class="chart-box">
+            <h3>🏠 부동산 가격과 범죄율 관계</h3>
+            <img src="{{ url_for('static', filename='images/data1.png') }}" alt="Scatter Plot" onclick="goToDetail('data1.png')">
+        </div>
+        
+        <!-- 두 번째 그래프 -->
+        <div class="chart-box">
+            <h3>⚠ 자치구별 위험도 비교</h3>
+            <img src="{{ url_for('static', filename='images/data2.png') }}" alt="Bar Chart" onclick="goToDetail('data2.png')">
+        </div>
+        
+        <!-- 세 번째 그래프 -->
+        <div class="chart-box">
+            <h3>📊 자치구별 범죄 유형 및 부동산 가격</h3>
+            <img src="{{ url_for('static', filename='images/data3.png') }}" alt="Bar & Line Chart" onclick="goToDetail('data3.png')">
+        </div>
+        
+        <!-- 네 번째 그래프 -->
+        <div class="chart-box">
+            <h3>📷 CCTV 개수와 부동산 가격 관계</h3>
+            <img src="{{ url_for('static', filename='images/data4.png') }}" alt="Bubble Chart" onclick="goToDetail('data4.png')">
+        </div>
+
+          <!-- 다섯섯 번째 그래프 -->
+          <div class="chart-box">
+            <h3>📈 안전도, 부동산가격, 범죄율 3D 분석</h3>
+            <img src="{{ url_for('static', filename='images/data5.png') }}" alt="3D Chart" onclick="goToDetail('data5.png')">
+        </div>
+
+          <!-- 여섯섯 번째 그래프 -->
+          <div class="chart-box">
+            <h3>🧷 서울시 자치구별 안전도 점수 비교</h3>
+            <img src="{{ url_for('static', filename='images/data6.png') }}" alt="Bar Chart" onclick="goToDetail('data6.png')">
+        </div>
+    </div>
+
+</body>
+</html>

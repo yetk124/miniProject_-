@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* 전체 컨테이너를 좌우 배치 */
+        .main-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch; /* 높이를 맞춤 */
+            gap: 20px; /* 좌우 간격 조절 */
+            margin-top: 30px;
+            max-width: 80%; /* 전체 컨테이너 폭 조정 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 좌측 이미지 컨테이너 */
+        .image-container {
+            width: 55%; /* 기존보다 조금 줄임 */
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 내부 요소 정렬 */
+        }
+
+        /* 우측 설명 컨테이너 */
+        .description-container {
+            width: 25%; /* 기존보다 조금 줄임 */
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 내부 요소 정렬 */
+        }
+
+        /* 이미지 스타일 */
+        .main-image {
+            max-width: 100%;
+            border-radius: 12px;
+        }
+
+        /* 반응형: 화면이 작을 때 세로 배치 */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .image-container, .description-container {
+                width: 90%;
+            }
+        }
+
+        .button {
+
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 메뉴 라디오 버튼 -->
+    <div class="radio-inputs">
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/data'" />
+            <span class="name">DATA</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" checked onclick="location.href='/main/chart'" />
+            <span class="name">CHART</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/ml'" />
+            <span class="name">ML</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/map'" />
+            <span class="name">MAP</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main'" />
+            <span class="name">HOME</span>
+        </label>
+    </div>
+
+    <!-- 메인 컨테이너 (좌우 배치) -->
+    <div class="main-container">
+        <!-- 왼쪽: 이미지 컨테이너 -->
+        <div class="image-container">
+            <h1>{{ title }}</h1>
+            <img src="{{ url_for('static', filename='images/' + image) }}" alt="{{ title }}" class="main-image">
+            <br><br>
+            <button class="button" onclick="location.href='/main/chart'">📊 차트 목록으로</button>
+        </div>
+
+        <!-- 오른쪽: 설명 컨테이너 -->
+        <div class="description-container">
+            <h2>📌 이미지 설명</h2>
+            <p> {{explain | safe}} </p>
+        </div> 
+    </div>
+
+</body>
+</html>

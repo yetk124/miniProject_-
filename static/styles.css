@@ -1,0 +1,174 @@
+/* 전체 레이아웃 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #c0cee24d;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* 전체 메뉴바 스타일 */
+/* From Uiverse.io by Spacious74 */ 
+/* From Uiverse.io - Modified */
+.radio-inputs {
+    position: relative;
+    display: flex;
+    border-radius: 0.5rem;
+    background-color: #f5c3da;
+    box-sizing: border-box;
+    font-size: 18px;
+    width: 100%;
+    padding: 1rem 1rem 0 1rem;
+    justify-content: flex-end; /* 요소들을 오른쪽 정렬 */
+  }
+  
+  .radio-inputs .radio input {
+    display: none;
+  }
+  
+  .radio-inputs .radio .name {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border: none;
+    padding: 0.5rem 0.8rem;
+    transition: all 0.15s ease-in-out;
+    position: relative;
+  }
+  
+  .radio-inputs .radio input:checked + .name {
+    background-color: #e8e8e8;
+    font-weight: 600;
+  }
+  
+  .radio-inputs .radio input + .name:hover {
+    color: #fff;
+  }
+  
+  .radio-inputs .radio input:checked + .name:hover {
+    color: #1d1d29;
+  }
+  
+  /* 선택된 메뉴 하단 장식의 위치 변경 */
+  .radio-inputs .radio input:checked + .name::after,
+  .radio-inputs .radio input:checked + .name::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f5c3da;
+    bottom: 0;
+  }
+  
+  /* 기존 ::before를 우측으로 변경 */
+  .radio-inputs .radio input:checked + .name::before {
+    right: -10px;  /* 우측으로 이동 */
+    left: auto;  /* 기존 left 속성 제거 */
+    border-bottom-left-radius: 300px;
+    box-shadow: -3px 3px 0px 3px #e8e8e8;
+  }
+  
+  /* 기존 ::after를 좌측으로 변경 */
+  .radio-inputs .radio input:checked + .name::after {
+    left: -10px;  /* 좌측으로 이동 */
+    right: auto;  /* 기존 right 속성 제거 */
+    border-bottom-right-radius: 300px;
+    box-shadow: 3px 3px 0px 3px #e8e8e8;
+  }
+  
+
+
+/* 컨테이너 스타일 */
+.container {
+    max-width: 1000px;
+    max-height: 100%;
+    margin: 40px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 제목 스타일 */
+h1, h2 {
+    color: #333;
+}
+
+/* 버튼 스타일 */
+.button-container {
+    margin: 20px 0;
+}
+
+button {
+    background-color: #8b4a76cc;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin: 8px;
+    font-size: 16px;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #46293ccc;
+    transform: translateY(-3px);
+}
+
+/* 홈 버튼 스타일 */
+.home-button {
+    background-color: #ff5a5f;
+}
+
+.home-button:hover {
+    background-color: #d94c52;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #854e73cc;
+    color: white;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+        margin: 6px 0;
+    }
+}
+
+
+h3, h4 {
+  color: #333;
+}
+
+ul {
+  padding-left: 10px;
+}

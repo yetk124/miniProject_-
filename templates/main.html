@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>main page</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* 🌍 기본 스타일 */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        /* 📋 메인 컨테이너 */
+        .container {
+            max-width: 100%;
+            background: white;
+            margin: 40px auto;
+            padding: 30px;  
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 🔹 Notion 스타일 컨테이너 */
+        .notion-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        /* 🔹 Notion 섹션 */
+        .notion-section {
+            flex: 1;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .notion-section h2 {
+            color: #002752;
+            font-size: 20px;
+            border-bottom: 2px solid #46525fc0;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+
+        .notion-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .notion-section ul li {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        /* 📊 표 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #354352;
+            color: white;
+        }
+   
+    </style>
+</head>
+<body>
+
+    <!-- 🔹 네비게이션 바 -->
+    <div class="radio-inputs">
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/data'" />
+            <span class="name">DATA</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/chart'" />
+            <span class="name">CHART</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/ml'" />
+            <span class="name">ML</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/map'" />
+            <span class="name">MAP</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" checked onclick="location.href='/main'" />
+            <span class="name">HOME</span>
+        </label>
+    </div>
+
+    <div class="container">
+        <h1>📊 서울 범죄 & 부동산 데이터 분석</h1>
+        <p>서울시의 부동산 실거래가, CCTV 개수, 범죄 발생 데이터를 분석하고 시각화합니다.</p>
+
+        <!-- 🔹 Notion 스타일 3개 섹션 -->
+        <div class="notion-container">
+
+            <!-- 📌 프로젝트 개요 -->
+            <div class="notion-section">
+                <h2>📌 프로젝트 개요</h2>
+                <ul>
+                    <li>🏠 <strong>부동산 가격과 범죄율 관계 분석</strong></li>
+                    <li>📷 <strong>CCTV 개수와 치안 비교</strong></li>
+                    <li>🤖 <strong>머신러닝을 활용한 범죄 예측 모델</strong></li>
+                    <li>🌍 <strong>웹 서비스 시각적 분석 제공</strong></li>
+                </ul>
+            </div>
+
+            <!-- 📌 사용한 데이터 -->
+            <div class="notion-section">
+                <h2>💾 사용 데이터</h2>
+                <table>
+                    <tr><th>데이터셋</th><th>설명</th></tr>
+                    <tr><td>🏠 부동산 실거래가</td><td>서울시 지역별 평균 거래 금액</td></tr>
+                    <tr><td>📷 CCTV 데이터</td><td>서울 자치구별 CCTV 개수</td></tr>
+                    <tr><td>🚔 범죄 데이터</td><td>5대 범죄(살인, 강도, 절도, 폭력, 강간) 통계</td></tr>
+                    <tr><td>🌍 위경도 데이터</td><td>지도 시각화를 위한 위치 정보</td></tr>
+                    <tr><td>🚨 치안시설 데이터</td><td>서울 자치구별 치안시설 개수</td></tr>
+                </table>
+            </div>
+
+            <!-- 📌 사용한 기술 -->
+            <div class="notion-section">
+                <h2>⚙️ 사용한 기술</h2>
+                <ul>
+                    <li>📊 <strong>데이터 분석 & 시각화</strong>: Pandas, Matplotlib, Seaborn, Folium, Plotly</li>
+                    <li>🧠 <strong>머신러닝</strong>: Scikit-learn (랜덤 포레스트, 회귀 분석), XGBoost</li>
+                    <li>🌐 <strong>웹 개발</strong>: Flask, HTML, CSS, JavaScript</li>
+                    <li>🗄 <strong>데이터베이스</strong>: MongoDB (데이터 저장 및 관리)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

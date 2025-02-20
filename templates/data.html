@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>data page</title>
+    <div class="radio-inputs">
+        <label class="radio">
+            <input type="radio" name="menu" checked onclick="location.href='/main/data'" />
+            <span class="name">DATA</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/chart'" />
+            <span class="name">CHART</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/ml'" />
+            <span class="name">ML</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main/map'" />
+            <span class="name">MAP</span>
+        </label>
+        <label class="radio">
+            <input type="radio" name="menu" onclick="location.href='/main'" />
+            <span class="name">HOME</span>
+        </label>
+    </div>
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function showData(dataType) {
+            window.location.href = "/main/data?type=" + dataType;  // Flask에서 데이터 유형을 전달
+        }
+    </script>
+
+</head> 
+<body>
+    <div class="container">
+        <h1>📋 데이터 조회 📋</h1>
+        <!-- 🔹 네 가지 데이터 선택 버튼 -->
+        <div class="button-container">
+            <button class="button" onclick="showData('real_estate_grouped')">🏠 부동산 데이터</button>
+            <button class="button" onclick="showData('cctv')">📷 CCTV 데이터</button>
+            <button class="button" onclick="showData('crime')">🚔 5대 범죄 데이터</button>
+            <button class="button" onclick="showData('police')">🚨 치안 시설 데이터</button>
+            <button class="button" onclick="showData('merged')">📊 최종 병합 데이터</button>
+        </div>
+
+        <hr>
+
+        <!-- 🔹 데이터 테이블 -->
+        {% if data_type == "crime" %}
+    <h2>🚔 5대 범죄 데이터</h2>
+    <table>
+        <tr>
+            <th>자치구</th>
+            <th>살인</th>
+            <th>강도</th>
+            <th>강간·강제추행</th>
+            <th>절도</th>
+            <th>폭력</th>
+        </tr>
+        {% for crime in crime_data %}
+        <tr>
+            <td>{{ crime['자치구'] }}</td>
+            <td>{{ crime['살인'] }}</td>
+            <td>{{ crime['강도'] }}</td>
+            <td>{{ crime['강간·강제추행'] }}</td>
+            <td>{{ crime['절도'] }}</td>
+            <td>{{ crime['폭력'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% else %}
+    {% if data_type == "real_estate_grouped" %}
+        <h2>🏠 부동산 데이터</h2>
+        <table>
+            <tr>
+                <th>자치구</th>
+                <th>평균 금액</th>
+                <th>평균 건물 면적</th>
+                <th>평균 건축년도</th>
+            </tr>
+            {% for real_estate_grouped in real_estate_grouped_data %}
+            <tr>
+                <td>{{ real_estate_grouped['자치구'] }}</td>
+                <td>{{ real_estate_grouped['평균거래금액']|round(3) }}</td>
+                <td>{{ real_estate_grouped['평균건물면적']|round(3) }}</td>
+                <td>{{ real_estate_grouped['평균건축년도']|round(3) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    {% elif data_type == "cctv" %}
+        <h2>📷 CCTV 데이터</h2>
+        <table>
+            <tr>
+                <th>자치구</th>
+                <th>CCTV 총 개수</th>
+            </tr>
+            {% for cctv in cctv_data %}
+            <tr>
+                <td>{{ cctv['자치구'] }}</td>
+                <td>{{ cctv['CCTV_총계'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    {% elif data_type == "police" %}
+        <h2>🚨 치안 시설 데이터</h2>
+        <table>
+            <tr>
+                <th>자치구</th>
+                <th>치안시설 총 개수</th>
+            </tr>
+            {% for police in police_data %}
+            <tr>
+                <td>{{ police['구'] }}</td>
+                <td>{{ police['개수'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    {% elif data_type == "merged" %}
+        <h2>📊 최종 병합 데이터</h2>
+        <table>
+            <tr>
+                <th>자치구</th>
+                <th>CCTV 개수</th>
+                <th>범죄 합계</th>
+                <th>평균 거래 금액</th>
+                <th>위험도</th>
+                <th>치안시설 합계</th>
+                <th>평균 건물 면적</th>
+            </tr>
+            {% for merged in merged_data %}
+            <tr>
+                <td>{{ merged['자치구'] }}</td>
+                <td>{{ merged['CCTV_총계'] }}</td>
+                <td>{{ merged['범죄_합계'] }}</td>
+                <td>{{ merged['평균거래금액'] }}</td>
+                <td>{{ merged['위험도']|round(3) }}</td>
+                <td>{{ merged['치안시설_합계']}}</td>
+                <td>{{ merged['평균건물면적']|round(3) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endif %}
+
+        <br>
+    </div>
+
+</body>
+</html>
