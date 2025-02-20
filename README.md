@@ -6,17 +6,6 @@
 
 ---
 
-📂 miniProject
-│── 📂 static  # 정적 파일 (CSS, JS, 이미지)
-│── 📂 templates  # HTML 템플릿
-│── 📂 data  # CSV 데이터
-│── app.py  # Flask 메인 파일
-│── load_data.py  # 데이터 MongoDB 저장 스크립트
-│── README.md  # 프로젝트 설명
-
----
-
-
 ## 📌 프로젝트 개요  
 
 ✅ **부동산 가격과 범죄율의 관계 분석**  
