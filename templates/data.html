@@ -130,9 +130,10 @@
                 <th>CCTV 개수</th>
                 <th>범죄 합계</th>
                 <th>평균 거래 금액</th>
-                <th>위험도</th>
+                <th>전체 인구수</th>
                 <th>치안시설 합계</th>
                 <th>평균 건물 면적</th>
+                <th>땅 면적</th>
             </tr>
             {% for merged in merged_data %}
             <tr>
@@ -140,9 +141,10 @@
                 <td>{{ merged['CCTV_총계'] }}</td>
                 <td>{{ merged['범죄_합계'] }}</td>
                 <td>{{ merged['평균거래금액'] }}</td>
-                <td>{{ merged['위험도']|round(3) }}</td>
+                <td>{{ merged['전체인구수'] }}</td>
                 <td>{{ merged['치안시설_합계']}}</td>
                 <td>{{ merged['평균건물면적']|round(3) }}</td>
+                <td>{{ merged['땅면적']}}</td>
             </tr>
             {% endfor %}
         </table>

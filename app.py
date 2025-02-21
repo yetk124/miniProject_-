@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, jsonify
 from pymongo import MongoClient
-import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
@@ -59,6 +58,12 @@ def data():
 def map():
     return render_template("map.html")
 
+
+@app.route('/main/map2')
+def map2():
+    return render_template("map2.html")
+
+
 # 🔹 차트 메인 페이지
 @app.route("/main/chart")
 def chart():
@@ -82,12 +87,12 @@ def chart_detail(image):
                 <h4>📊 <strong>부동산 가격과 범죄율 관계 (산점도)</strong></h4>
                 <ul>
                     <li><strong>X축:</strong> 평균 부동산 거래 금액 (만원)</li>
-                    <li><strong>Y축:</strong> 위험도 (범죄율 / CCTV 개수)</li>
+                    <li><strong>Y축:</strong> 위험도 (범죄율 / CCTV 비율 + 치안시설 비율)</li>
                     <li><strong>색상:</strong> 자치구별 구분</li>
                 </ul>
                 <h4>📌 <strong>해석:</strong></h4>
                 <ul>
-                    <li>강남구, 송파구 등은 <strong>부동산 가격이 높지만 위험도도 중간 이상</strong></li>
+                    <li>강남구, 서초구 등은 <strong>부동산 가격이 높지만 위험도도 중간 이상</strong></li>
                     <li>종로구, 중구 등은 <strong>범죄율이 높은 지역</strong></li>
                     <li>가격과 범죄율 간의 직접적인 상관관계는 크지 않음</li>
                 </ul>
@@ -102,13 +107,13 @@ def chart_detail(image):
             <h4>📊 <strong>자치구별 위험도 점수 비교 (막대 그래프)</strong></h4>
             <ul>
                 <li><strong>X축:</strong> 자치구</li>
-                <li><strong>Y축:</strong> 위험도 (범죄 발생 건수 / CCTV 개수)</li>
+                <li><strong>Y축:</strong> 위험도 (범죄 발생 건수 / CCTV 비율 + 치안시설 비율)</li>
                 <li><strong>색상:</strong> 위험도 수준 (진한 색 = 위험도가 높음)</li>
             </ul>
             <h4>📌 <strong>해석:</strong></h4>
             <ul>
-                <li><strong>종로구, 송파구, 강서구, 중구</strong> 등이 위험도가 높음</li>
-                <li><strong>성북구, 성동구, 서대문구</strong> 등은 비교적 안전</li>
+                <li><strong>종로구, 중구, 용산구, 서초구</strong> 등이 위험도가 높음</li>
+                <li><strong>양천구, 성동구, 성북구, 중랑구</strong> 등은 비교적 안전</li>
                 <li>위험도가 높은 곳은 <strong>CCTV 부족 또는 범죄 발생 빈도가 높은 지역</strong>일 가능성 있음</li>
             </ul>
             <h4>🧐 <strong>결론:</strong></h4>
@@ -187,12 +192,12 @@ def chart_detail(image):
             <ul>
                 <li><strong>X축:</strong> 자치구</li>
                 <li><strong>Y축:</strong> 안전도 점수</li>
-                <li><strong>색상:</strong> 안전 수준 (진한 파랑 = 안전도가 높음, 연한 파랑 = 낮음)</li>
+                <li><strong>색상:</strong> 안전 수준 (진한 파랑 = 안전도가 낮음, 연한 파랑 = 높음)</li>
             </ul>
             <h4>📌 <strong>해석:</strong></h4>
             <ul>
-                <li><strong>강남구, 서초구, 서대문구</strong>는 가장 높은 안전 점수를 기록</li>
-                <li><strong>성북구, 금천구, 도봉구</strong> 등은 상대적으로 안전 점수가 낮음</li>
+                <li><strong>양천구, 성동구, 성북구구</strong>는 가장 높은 안전 점수를 기록</li>
+                <li><strong>종로구, 중구, 용산구</strong> 등은 상대적으로 안전 점수가 낮음</li>
                 <li>안전 점수가 낮은 지역일수록 추가적인 방범 대책이 필요할 수 있음</li>
             </ul>
             <h4>🧐 <strong>결론:</strong></h4>
@@ -209,28 +214,46 @@ def chart_detail(image):
     return render_template("chart_detail.html", image=image, title=title, explain=explain)
 
 ### 📌 범죄 발생 예측 모델
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from xgboost import XGBRegressor
+
 def predict_crime():
-    X = merged_data[["CCTV_총계", "평균거래금액"]]
+    # 🔹 데이터 준비
+    X = merged_data[["CCTV_총계", "치안시설_합계", "평균거래금액", "전체인구수", "땅면적"]]
     y = merged_data["범죄_합계"]
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
-    
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    # 🔹 데이터 정규화
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    # 🔹 데이터 분리 (학습용 80%, 테스트용 20%)
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+
+    # 🔹 XGBoost 모델 학습
+    model = XGBRegressor(n_estimators=500, learning_rate=0.05, max_depth=6, random_state=42)
     model.fit(X_train, y_train)
-    
+
+    # 🔹 예측 및 평가 지표 계산
     y_pred = model.predict(X_test)
     mae = mean_absolute_error(y_test, y_pred)
-    
-    result_df = pd.DataFrame({
-        "자치구": merged_data.loc[X_test.index, "자치구"],
-        "실제 범죄 발생": y_test.values,
-        "예측 범죄 발생": y_pred,
-        "오차(절대값)": abs(y_test.values - y_pred)
-    }).sort_values(by="오차(절대값)", ascending=False).head(10)
 
-    # 🔹 HTML 테이블로 변환
-    result_html = result_df.to_html(index=False, classes="styled-table", justify="center")
-    return f"<h3>✅ 평균 절대 오차 (MAE): {mae:.2f}</h3>" + result_html
+    # 🔹 전체 데이터 예측
+    merged_data["예측 범죄 발생 수"] = model.predict(X_scaled)
+    merged_data["절대 오차"] = abs(merged_data["예측 범죄 발생 수"] - merged_data["범죄_합계"])
+
+    # 🔹 정렬 및 상위 10개 선택
+    result_df = merged_data[["자치구", "범죄_합계", "예측 범죄 발생 수", "절대 오차"]].sort_values(by="절대 오차", ascending=False).head(15)
+
+    # 🔹 HTML 테이블 반환
+    return f"""
+    <h4>✅ 평균 절대 오차 (MAE): {mae:.2f} 건</h4>
+    {result_df.to_html(index=False, classes="styled-table", justify="center")}
+    """
+
 
 
 ### 📌 안전한 거주지 추천 모델
@@ -251,8 +274,8 @@ def predict_safety():
 
     new_data = pd.DataFrame({
         "CCTV_총계": [5000, 8000, 6000, 4500, 4900],
-        "치안시설_합계": [10, 20, 15, 22, 15],
-        "평균거래금액": [80000, 150000, 100000, 90000, 63624],
+        "치안시설_합계": [10, 20, 18, 22, 15],
+        "평균거래금액": [80000, 150000, 70000, 90000, 63624],
         "범죄_합계": [3000, 1000, 300, 600, 2400]
     })
     
